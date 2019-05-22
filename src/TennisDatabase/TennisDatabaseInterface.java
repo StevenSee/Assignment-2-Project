@@ -1,8 +1,7 @@
 
 
 
-// Steven Causley
-// Interface by Giuseppe Turini
+// Giuseppe Turini
 // CS-102, Spring 2019
 // Assignment 1
 
@@ -18,6 +17,13 @@ interface TennisDatabaseInterface {
    //         Throws a checked (critical) exception if the file (file name) does not exist.
    public void loadFromFile( String fileName ) throws TennisDatabaseException, TennisDatabaseRuntimeException;
    
+   // Desc.: Saves data to file following the format described in the specifications.
+   // Output: Throws a checked (critical) exception if the file open for writing fails.
+   public void saveToFile( String fileName ) throws TennisDatabaseException;
+   
+   // Desc.: Resets the database, making it empty.
+   public void reset();
+   
    // Desc.: Search for a player in the database by input id, and returns a copy of that player (if found).
    // Output: Throws an unchecked (non-critical) exception if there is no player with that input id.
    public TennisPlayer getPlayer( String id ) throws TennisDatabaseRuntimeException;
@@ -29,7 +35,7 @@ interface TennisDatabaseInterface {
    // Desc.: Returns copies (deep copies) of all matches of input player (id) arranged in the output array (sorted by date, most recent first).
    // Input: The id of a player.
    // Output: Throws a checked (critical) exception if the player (id) does not exists.
-   //         Throws an uncheckedor (non-critical) exception if there are no matches (but the player id exists).
+   //         Throws an unchecked (non-critical) exception if there are no matches (but the player id exists).
    public TennisMatch[] getMatchesOfPlayer( String playerId  ) throws TennisDatabaseException, TennisDatabaseRuntimeException;
    
    // Desc.: Returns copies (deep copies) of all matches in the database arranged in the output array (sorted by date, most recent first).
@@ -40,6 +46,10 @@ interface TennisDatabaseInterface {
    // Input: All the data required for a player.
    // Output: Throws a checked (critical) exception if player id is already in the database.
    public void insertPlayer( String id, String firstName, String lastName, int year, String country ) throws TennisDatabaseException;
+   
+   // Desc.: Search for a player in the database by id, and delete it with all his matches (if found).
+   // Output: Throws an unchecked (non-critical) exception if there is no player with that input id.
+   public void deletePlayer( String playerId ) throws TennisDatabaseRuntimeException;
 
    // Desc.: Insert a match into the database.
    // Input: All the data required for a match.

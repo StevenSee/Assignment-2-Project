@@ -1,8 +1,7 @@
 
 
 
-// Steven Causley
-// Exception by Giuseppe Turini
+// Giuseppe Turini
 // CS-102, Spring 2019
 // Assignment 1
 

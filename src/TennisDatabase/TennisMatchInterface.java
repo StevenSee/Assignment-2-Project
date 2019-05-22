@@ -1,8 +1,7 @@
 
 
 
-// Steven Causley
-// Interface by Giuseppe Turini
+// Giuseppe Turini
 // CS-102, Spring 2019
 // Assignment 1
 
@@ -15,6 +14,7 @@ import java.util.NoSuchElementException;
 
 // Interface (package-private) providing the specifications for the TennisMatch class.
 public interface TennisMatchInterface extends Comparable<TennisMatch> {      
+   
    // Accessors (getters).
    public String getIdPlayer1();
    public String getIdPlayer2();

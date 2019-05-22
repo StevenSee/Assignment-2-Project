@@ -65,6 +65,16 @@ public class TennisDatabase implements TennisDatabaseInterface
     }
 
     @Override
+    public void saveToFile(String fileName) throws TennisDatabaseException {
+
+    }
+
+    @Override
+    public void reset() {
+
+    }
+
+    @Override
     public TennisPlayer getPlayer(String id) throws TennisDatabaseRuntimeException
     {
         return playerContainer.getPlayer(id);
@@ -103,6 +113,11 @@ public class TennisDatabase implements TennisDatabaseInterface
 
     }
 
+    @Override
+    public void deletePlayer(String playerId) throws TennisDatabaseRuntimeException {
+
+    }
+
     //Adds match to matchContainer
     @Override
     public void insertMatch(String idPlayer1, String idPlayer2, int year, int month, int day, String tournament, String score) throws TennisDatabaseException
@@ -119,6 +134,14 @@ public class TennisDatabase implements TennisDatabaseInterface
             throw new TennisDatabaseRuntimeException("Error: Invalid Match. Match not added");
         }
 
+        if(m.getWinner() == 1){
+            getPlayer(m.getIdPlayer1()).addWin();
+            getPlayer(m.getIdPlayer2()).addLoss();
+        }
+        else {
+            getPlayer(m.getIdPlayer1()).addLoss();
+            getPlayer(m.getIdPlayer2()).addWin();
+        }
 
     }
 
@@ -176,7 +199,7 @@ public class TennisDatabase implements TennisDatabaseInterface
         {
             String[] outputArray = new String[playerContainer.getPlayerCount()];
             TennisPlayer[] playerArray = getAllPlayers();
-            calcWinLoss();
+            //calcWinLoss();
             for (int i = 0; i < playerArray.length; i++)
             {
                 outputArray[i] = (playerArray[i].getId() + ": " + playerArray[i].getFirstName() + " " +
@@ -188,6 +211,7 @@ public class TennisDatabase implements TennisDatabaseInterface
 
     //Calculates amount of matches won/lost for all players
     //FIXME: Change to only calculate once
+    /*
     public void calcWinLoss()
     {
         TennisMatch[] array = getAllMatches();
@@ -204,6 +228,8 @@ public class TennisDatabase implements TennisDatabaseInterface
             }
         }
     }
+
+     */
 
     //gets number of matches in matchContainer
     public int getMatchCount()

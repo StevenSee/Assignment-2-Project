@@ -1,8 +1,7 @@
 
 
 
-// Steven Causley
-// Interface by Giuseppe Turini
+// Giuseppe Turini
 // CS-102, Spring 2019
 // Assignment 1
 
@@ -18,7 +17,7 @@ interface TennisPlayerInterface extends Comparable<TennisPlayer> {
    public String getLastName();
    public int getBirthYear();
    public String getCountry();
-      
+   
 }
 
 
