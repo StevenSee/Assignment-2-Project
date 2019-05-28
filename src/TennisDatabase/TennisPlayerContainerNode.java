@@ -18,34 +18,25 @@ class TennisPlayerContainerNode implements TennisPlayerContainerNodeInterface
         this.left = null;
         this.player = inputPlayer;
         this.list = new SortedLinkedList<TennisMatch>();
-
     }
 
-    @Override
     public TennisPlayer getPlayer()
     {
         return this.player;
     }
-
-    @Override
     public TennisPlayerContainerNode getLeft()
     {
         return this.left;
     }
-
-    @Override
     public TennisPlayerContainerNode getRight()
     {
         return this.right;
     }
 
-    @Override
     public void setLeft(TennisPlayerContainerNode p)
     {
         this.left = p;
     }
-
-    @Override
     public void setRight(TennisPlayerContainerNode n)
     {
         this.right = n;

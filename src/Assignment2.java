@@ -61,16 +61,16 @@ public class Assignment2
                 switch (actionInput)
                 {
                     case 1:
-                        System.out.println("You selected \"Print all tennis players.\"");
+                        /*System.out.println("You selected \"Print all tennis players.\"");
                         String[] playerOutputArray = database.getPlayerStringArray(); //array of tennis play strings
                         for (int i = 0; i < playerOutputArray.length; i++)
                         {
                             System.out.println(playerOutputArray[i]);
-                        }
+                        }*/
 
                         break;
                     case 2:
-                        System.out.println("You selected \"Print all tennis matches of a player.\"");
+                        /*System.out.println("You selected \"Print all tennis matches of a player.\"");
                         System.out.println("Enter player id:");
                         String idInput = consoleIn.next();
                         idInput = idInput.toUpperCase();
@@ -86,10 +86,10 @@ public class Assignment2
                         } catch (TennisDatabaseRuntimeException e)
                         {
                             System.out.println("Could not print matches for id: " + idInput);
-                        }
+                        }*/
                         break;
                     case 3:
-                        System.out.println("You selected \"Print all tennis matches.\"");
+                        /*System.out.println("You selected \"Print all tennis matches.\"");
 
                         String[] matchArray = database.getAllMatchesString(); //array of match strings
                         try
@@ -107,7 +107,7 @@ public class Assignment2
                         } catch (NullPointerException e) //do nothing with empty array spaces
                         {
 
-                        }
+                        }*/
                         break;
                     case 4:
                         System.out.println("You selected \"Insert a tennis player.\"");

@@ -83,13 +83,15 @@ public class TennisDatabase implements TennisDatabaseInterface
     @Override
     public TennisPlayer[] getAllPlayers() throws TennisDatabaseRuntimeException
     {
-        return playerContainer.getAllPlayers();
+        //return playerContainer.getAllPlayers();
+        return null;
     }
 
     @Override
     public TennisMatch[] getMatchesOfPlayer(String playerId) throws TennisDatabaseRuntimeException
     {
-        return playerContainer.getPlayerMatches(playerId);
+        //return playerContainer.getPlayerMatches(playerId);
+        return null;
     }
 
     @Override
@@ -161,7 +163,7 @@ public class TennisDatabase implements TennisDatabaseInterface
     }
 
     //Prints matches with a specific player id
-    public String[] getMatchesOfPlayerString(String idInput)
+    /*public String[] getMatchesOfPlayerString(String idInput)
     {
         TennisMatch[] matchArray = playerContainer.getPlayerMatches(idInput);
         if (matchArray.length == 0) //if player has no matches
@@ -184,10 +186,10 @@ public class TennisDatabase implements TennisDatabaseInterface
             }
             return outputArray;
         }
-    }
+    }*/
 
     //Converts all players in playerContainer into String array
-    public String[] getPlayerStringArray()
+    /*public String[] getPlayerStringArray()
     {
 
         if (playerContainer.getPlayerCount() == 0)
@@ -207,7 +209,7 @@ public class TennisDatabase implements TennisDatabaseInterface
             }
             return outputArray;
         }
-    }
+    }*/
 
     //Calculates amount of matches won/lost for all players
     //FIXME: Change to only calculate once
@@ -232,13 +234,13 @@ public class TennisDatabase implements TennisDatabaseInterface
      */
 
     //gets number of matches in matchContainer
-    public int getMatchCount()
+    /*public int getMatchCount()
     {
         return matchContainer.getMatchCount();
-    }
+    }*/
 
     //returns array of strings for all matches
-    public String[] getAllMatchesString()
+    /*public String[] getAllMatchesString()
     {
         TennisMatch[] array = getAllMatches();
         int arrayLength = 0;
@@ -258,6 +260,6 @@ public class TennisDatabase implements TennisDatabaseInterface
                     + getPlayer(array[i].getIdPlayer1()).getFirstName() + " " + getPlayer(array[i].getIdPlayer1()).getLastName() + " - " + getPlayer(array[i].getIdPlayer2()).getFirstName() + " " + getPlayer(array[i].getIdPlayer2()).getLastName() + "," + " " + array[i].getTournament() + "," + " " + array[i].getMatchScore());
         }
         return output;
-    }
+    }*/
 
 }
