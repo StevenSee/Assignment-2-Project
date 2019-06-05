@@ -1,6 +1,6 @@
 //Steven Causley
 //CS 102-01
-//Assignment 1
+//Assignment 2
 
 //TODO: Fix Heading Comments
 
@@ -66,7 +66,7 @@ public class Assignment2
                         for (int i = 0; i < playerOutputArray.length; i++)
                         {
                             System.out.println(playerOutputArray[i]);
-                        }*/
+                        }
 
                         break;
                     case 2:
@@ -148,6 +148,10 @@ public class Assignment2
                         System.out.println("Adding match...");
                         database.insertMatch(newId1, newId2, newYear, newMonth, newDay, newName, newScore);
                         System.out.println("Match Added Successfully");
+                        break;
+                    case 6:
+                        System.out.println("Resetting Database");
+                        database.reset();
                         break;
                     case 9:
                         System.out.println("Exiting...");
