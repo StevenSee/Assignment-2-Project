@@ -24,6 +24,9 @@ class TennisPlayerContainerNode implements TennisPlayerContainerNodeInterface
     {
         return this.player;
     }
+    public void setPlayer(TennisPlayer player){
+        this.player = player;
+    }
     public TennisPlayerContainerNode getLeft()
     {
         return this.left;
@@ -71,5 +74,13 @@ class TennisPlayerContainerNode implements TennisPlayerContainerNodeInterface
             b[i] = new TennisMatch(a[i]);
         }
         return b;
+    }
+
+    public SortedLinkedList<TennisMatch> getMatchList(){
+        return this.list;
+    }
+
+    public void setMatchList(SortedLinkedList<TennisMatch> matches){
+        this.list = matches;
     }
 }

@@ -45,23 +45,81 @@ class TennisPlayerContainer implements TennisPlayerContainerInterface {
         }
     }
 
+    //Desc: Deletes node by id on the input BST (current root)
+    //Input: Binary Search Tree
+    //Output: BST after removal
+    private TennisPlayerContainerNode deletePlayerNodeRec(TennisPlayerContainerNode currRoot, String id) throws TennisDatabaseRuntimeException {
+        if (currRoot == null) {
+            throw new TennisDatabaseRuntimeException("Deleted Failed, Player could not be found");
+        } else {
+            // 3-way comparison to understand how to proceed the search.
+            int comparisonResult = currRoot.getPlayer().getId().compareTo(id);
+            if (comparisonResult == 0) {
+                return deleteNode(currRoot);
+            } else if (comparisonResult < 0) {
+                TennisPlayerContainerNode newRightChild = deletePlayerNodeRec(currRoot.getRight(), id);
+                currRoot.setRight(newRightChild);
+                return currRoot;
+            } else {
+                TennisPlayerContainerNode newLeftChild = deletePlayerNodeRec(currRoot.getLeft(), id);
+                currRoot.setLeft(newLeftChild);
+                return currRoot;
+            }
+        }
+    }
+
+    private TennisPlayerContainerNode deleteNode(TennisPlayerContainerNode currRoot) {
+        //currRoot has no children
+        if (currRoot.getLeft() == null && currRoot.getRight() == null) {
+            return null;
+        }
+        //only has left child
+        else if (currRoot.getLeft() != null && currRoot.getRight() == null) {
+            return currRoot.getLeft();
+        }
+        //only has right child
+        else if (currRoot.getRight() != null && currRoot.getLeft() == null) {
+            return currRoot.getRight();
+        }
+        //symmetric, search for inorder successor swap
+        else { //TODO: delete node for when node has children on both sides
+            //find the inorder successor, leftmost node of the right subtree, get leftmost of right child
+            TennisPlayerContainerNode leftMost = findLeftMost(currRoot.getRight());
+            //perform the copy of content from the successor into currRoot (set and get players and matches)
+            currRoot.setPlayer(leftMost.getPlayer());
+            currRoot.setMatchList(leftMost.getMatchList());
+            //delete the successor , if no children return null, if right child return that
+            TennisPlayerContainerNode deletedNode = deleteLeftMostRec(currRoot.getRight());
+            currRoot.setRight(deletedNode);
+            return deletedNode;
+
+            //return currRoot
+        }
+    }
+
+    private TennisPlayerContainerNode deleteLeftMostRec(TennisPlayerContainerNode currRoot){
+        if (currRoot == null) { return null;}
+        else if (currRoot.getLeft() == null) {return currRoot.getRight();}
+        else {
+            TennisPlayerContainerNode newLeftNode = deleteLeftMostRec(currRoot.getRight());
+            currRoot.setLeft(newLeftNode);
+            return currRoot;
+        }
+    }
+
+    private TennisPlayerContainerNode findLeftMost(TennisPlayerContainerNode currRoot) {
+        if (currRoot.getLeft() == null) {
+            return currRoot;
+        }
+        else {
+            return findLeftMost(currRoot.getLeft());
+        }
+    }
+
     // Desc.: Search for a player in this container by id, and delete it with all his matches (if found).
     // Output: Throws an unchecked (non-critical) exception if there is no player with that input id.
     public void deletePlayer(String playerId) throws TennisDatabaseRuntimeException {
-        TennisPlayerContainerNode nodePlayer = this.root;
-        boolean playerFound = false;
-        while (!playerFound) {
-            if (nodePlayer.getPlayer().getId().compareTo(playerId) < 0) {
-                nodePlayer = nodePlayer.getLeft();
-            } else if (nodePlayer.getPlayer().getId().compareTo(playerId) > 0) {
-                nodePlayer = nodePlayer.getRight();
-            } else if (nodePlayer.getPlayer().getId().compareTo(playerId) == 0) {
-                playerFound = true;
-            } else {
-                throw new TennisDatabaseRuntimeException("Player could not be found for match insertion");
-            }
-        }
-    //TODO: Code player deletion
+        TennisPlayerContainerNode playerNode = deletePlayerNodeRec(this.root, playerId);
     }
 
     // Desc.: Insert a tennis player into this container.
@@ -100,37 +158,15 @@ class TennisPlayerContainer implements TennisPlayerContainerInterface {
         String idPlayer1 = match.getIdPlayer1();
         String idPlayer2 = match.getIdPlayer2();
 
-        TennisPlayerContainerNode nodeP1 = this.root;
-        boolean p1Found = false;
-        TennisPlayerContainerNode nodeP2 = this.root;
-        boolean p2Found = false;
-        while (!p1Found) {
-            if (nodeP1.getPlayer().getId().compareTo(idPlayer1) > 0) {
-                nodeP1 = nodeP1.getLeft();
-            } else if (nodeP1.getPlayer().getId().compareTo(idPlayer1) < 0) {
-                nodeP1 = nodeP1.getRight();
-            } else if (nodeP1.getPlayer().getId().compareTo(idPlayer1) == 0) {
-                p1Found = true;
-            } else {
-                throw new TennisDatabaseException("Player1 could not be found for match insertion");
-            }
-        }
-        while (!p2Found) {
-            if (nodeP2.getPlayer().getId().compareTo(idPlayer2) > 0) {
-                nodeP2 = nodeP2.getLeft();
-            } else if (nodeP2.getPlayer().getId().compareTo(idPlayer2) < 0) {
-                nodeP2 = nodeP2.getRight();
-            } else if (nodeP2.getPlayer().getId().compareTo(idPlayer2) == 0) {
-                p2Found = true;
-            } else {
-                throw new TennisDatabaseException("Player2 could not be found for match insertion");
-            }
-        }
-        if (p1Found && p2Found) {
+        TennisPlayerContainerNode nodeP1 = getPlayerNodeRec(this.root, idPlayer1);
+        TennisPlayerContainerNode nodeP2 = getPlayerNodeRec(this.root, idPlayer2);
+
+        if ((nodeP1 != null) && (nodeP2 != null)) {
             nodeP1.insertMatch(match);
             nodeP2.insertMatch(match);
+        } else {
+            throw new TennisDatabaseException("Player could not be found for insertion");
         }
-
 
     }
 
@@ -139,33 +175,19 @@ class TennisPlayerContainer implements TennisPlayerContainerInterface {
     // Output: Throws a checked (critical) exception if the player (id) does not exists.
     //         Throws an unchecked (non-critical) exception if there are no matches (but the player id exists).
     public TennisMatch[] getMatchesOfPlayer(String playerId) throws TennisDatabaseRuntimeException {
-        TennisPlayerContainerNode nodePlayer = this.root;
-        boolean playerFound = false;
-        while (!playerFound) {
-            if (nodePlayer.getPlayer().getId().compareTo(playerId) < 0) {
-                nodePlayer = nodePlayer.getLeft();
-            } else if (nodePlayer.getPlayer().getId().compareTo(playerId) > 0) {
-                nodePlayer = nodePlayer.getRight();
-            } else if (nodePlayer.getPlayer().getId().compareTo(playerId) == 0) {
-                playerFound = true;
-            } else {
-                throw new TennisDatabaseRuntimeException("Player could not be found for match insertion");
-            }
-        }
-        if (playerFound) {
-            return nodePlayer.getMatches();
-        } else {
-            throw new TennisDatabaseRuntimeException("Player could not be found for match insertion");
-        }
+        TennisPlayerContainerNode nodePlayer = getPlayerNodeRec(this.root, playerId);
+
+        return nodePlayer.getMatches();
     }
 
-    public TennisPlayer[] getAllPlayers(){
-        TennisPlayerContainerIterator iterator = iterator();
+    public TennisPlayer[] getAllPlayers() {
+        TennisPlayerContainerIterator iterator = this.iterator();
         iterator.setInorder();
         TennisPlayer[] outputArray = new TennisPlayer[playerCount];
         int index = 0;
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             outputArray[index] = iterator.next();
+            index++;
         }
         return outputArray;
     }

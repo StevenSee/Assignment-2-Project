@@ -87,4 +87,9 @@ public class TennisPlayer implements TennisPlayerInterface
     {
         return losses;
     }
+
+    public String getExport(){
+        String output = "PLAYER/" + id + "/"+ firstName + "/" + lastName + "/" + year + "/" + country;
+        return  output;
+    }
 }

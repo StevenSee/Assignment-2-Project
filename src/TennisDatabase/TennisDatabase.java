@@ -6,6 +6,7 @@ package TennisDatabase;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class TennisDatabase implements TennisDatabaseInterface {
@@ -66,7 +67,19 @@ public class TennisDatabase implements TennisDatabaseInterface {
         } catch (FileNotFoundException e) {
             throw new TennisDatabaseException("ERROR: Input file not found.");
         }
-        //TODO: Exporting
+
+        //print players
+        TennisPlayerContainerIterator playerIterator = playerContainer.iterator();
+        playerIterator.setInorder();
+
+        while (playerIterator.hasNext()) {
+            out.println(playerIterator.next().getExport());
+        }
+        Iterator<TennisMatch> matchIterator = matchContainer.iterator();
+
+        while (matchIterator.hasNext()) {
+            out.println((matchIterator.next().getExport()));
+        }
 
     }
 
@@ -156,7 +169,6 @@ public class TennisDatabase implements TennisDatabaseInterface {
 
         return output;
     }
-
 
 
 }

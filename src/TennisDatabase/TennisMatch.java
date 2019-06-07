@@ -3,8 +3,7 @@
 // Assignment 1
 package TennisDatabase;
 
-public class TennisMatch implements TennisMatchInterface
-{
+public class TennisMatch implements TennisMatchInterface {
     private String idPlayer1;
     private String idPlayer2;
     private int year;
@@ -15,8 +14,7 @@ public class TennisMatch implements TennisMatchInterface
 
     private int winner; //{1,2}: 1 mean player1 won, 2 means player2 won
 
-    public TennisMatch(String idPlayer1, String idPlayer2, int year, int month, int day, String tournament, String score)
-    {
+    public TennisMatch(String idPlayer1, String idPlayer2, int year, int month, int day, String tournament, String score) {
         this.idPlayer1 = idPlayer1;
         this.idPlayer2 = idPlayer2;
         this.year = year;
@@ -24,19 +22,16 @@ public class TennisMatch implements TennisMatchInterface
         this.day = day;
         this.tournament = tournament;
         this.score = score;
-        try
-        {
+        try {
             this.winner = TennisMatchInterface.processMatchScore(this.score);
 
-        } catch (TennisDatabaseRuntimeException e)
-        {
+        } catch (TennisDatabaseRuntimeException e) {
             throw new TennisDatabaseRuntimeException("Match creation failed: score invalid");
         }
     }
 
     //copy constructor
-    public TennisMatch(TennisMatch match)
-    {
+    public TennisMatch(TennisMatch match) {
         this.idPlayer1 = match.idPlayer1;
         this.idPlayer2 = match.idPlayer2;
         this.year = match.year;
@@ -48,84 +43,72 @@ public class TennisMatch implements TennisMatchInterface
     }
 
     @Override
-    public String getIdPlayer1()
-    {
+    public String getIdPlayer1() {
         return idPlayer1;
     }
 
     @Override
-    public String getIdPlayer2()
-    {
+    public String getIdPlayer2() {
         return idPlayer2;
     }
 
     @Override
-    public int getDateYear()
-    {
+    public int getDateYear() {
         return year;
     }
 
     @Override
-    public int getDateMonth()
-    {
+    public int getDateMonth() {
         return month;
     }
 
     @Override
-    public int getDateDay()
-    {
+    public int getDateDay() {
         return day;
     }
 
     @Override
-    public String getTournament()
-    {
+    public String getTournament() {
         return tournament;
     }
 
     @Override
-    public String getMatchScore()
-    {
+    public String getMatchScore() {
         return score;
     }
 
     @Override
-    public int getWinner()
-    {
+    public int getWinner() {
         return winner;
     }
 
     @Override
-    public int compareTo(TennisMatch inMatch) throws NullPointerException
-    {
-        if (this.year > inMatch.year)
-        {
+    public int compareTo(TennisMatch inMatch) throws NullPointerException {
+        if (this.year > inMatch.year) {
             return 1;
-        } else if (this.year < inMatch.year)
-        {
+        } else if (this.year < inMatch.year) {
             return -1;
-        } else
-        {
-            if (this.month > inMatch.month)
-            {
+        } else {
+            if (this.month > inMatch.month) {
                 return 1;
-            } else if (this.month < inMatch.month)
-            {
+            } else if (this.month < inMatch.month) {
                 return -1;
-            } else
-            {
-                if (this.day > inMatch.day)
-                {
+            } else {
+                if (this.day > inMatch.day) {
                     return 1;
                 }
-                if (this.day < inMatch.day)
-                {
+                if (this.day < inMatch.day) {
                     return -1;
-                } else
-                {
+                } else {
                     return 1;
                 }
             }
         }
+    }
+
+    public String getExport() {
+        String output = "MATCH/" + idPlayer1 + "/" + idPlayer2 + "/" + year + "" + month + "" + day + "/" + tournament + "/" + score;
+
+        return output;
     }
 }
