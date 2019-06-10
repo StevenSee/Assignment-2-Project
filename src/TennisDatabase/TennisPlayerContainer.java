@@ -119,7 +119,8 @@ class TennisPlayerContainer implements TennisPlayerContainerInterface {
     // Desc.: Search for a player in this container by id, and delete it with all his matches (if found).
     // Output: Throws an unchecked (non-critical) exception if there is no player with that input id.
     public void deletePlayer(String playerId) throws TennisDatabaseRuntimeException {
-        TennisPlayerContainerNode playerNode = deletePlayerNodeRec(this.root, playerId);
+        this.root = deletePlayerNodeRec(this.root, playerId);
+        playerCount--;
     }
 
     // Desc.: Insert a tennis player into this container.

@@ -4,11 +4,8 @@
 
 import TennisDatabase.TennisDatabase;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -34,6 +31,7 @@ public class Assignment2 extends Application {
         TableView<TennisPlayer> playerTableView = new TableView<TennisPlayer>();
         TableView<TennisMatch> matchTableView = new TableView<TennisMatch>();
 
+        //Player Table Headings
         TableColumn<TennisPlayer, String> id = new TableColumn<TennisPlayer, String>("Id");
         id.setCellValueFactory(new PropertyValueFactory<>("Id"));
         TableColumn<TennisPlayer, String> name = new TableColumn<TennisPlayer, String>("Name");
@@ -49,6 +47,7 @@ public class Assignment2 extends Application {
 
         playerTableView.getColumns().addAll(id, name, birthYear, country, wins, losses);
 
+        //Match Table Headings
         TableColumn<TennisMatch, String> id1 = new TableColumn<TennisMatch, String>("Player 1 Id");
         id1.setCellValueFactory(new PropertyValueFactory<>("IdPlayer1"));
         TableColumn<TennisMatch, String> id2 = new TableColumn<TennisMatch, String>("Player 2 Id");
@@ -62,9 +61,7 @@ public class Assignment2 extends Application {
 
         matchTableView.getColumns().addAll(id1, id2, date, tournament, scores);
 
-        playerTableView.setItems(this.getPlayers());
-        matchTableView.setItems(this.getMatches());
-
+        //Load From File Button and Parameters
         Button loadButton = new Button("Load From File");
         TextField loadFileName = new TextField();
         loadFileName.setPromptText("File Name");
@@ -81,6 +78,7 @@ public class Assignment2 extends Application {
                 }
         );
 
+        //Save to File Button and Parameters
         Button saveButton = new Button("Save to File");
         TextField saveFileName = new TextField();
         saveFileName.setPromptText("File Name");
@@ -95,6 +93,7 @@ public class Assignment2 extends Application {
                 }
         );
 
+        //Reset Button and Parameters
         Button resetButton = new Button("Reset Database");
         resetButton.setOnAction(
                 eventReset -> {
@@ -108,6 +107,7 @@ public class Assignment2 extends Application {
                 }
         );
 
+        //Delete Button and Parameters
         Button deleteButton = new Button("Delete Player");
         TextField deleteId = new TextField();
         deleteId.setPromptText("Player Id");
@@ -123,6 +123,7 @@ public class Assignment2 extends Application {
                 }
         );
 
+        //Insert Player Button and Parameters
         Button insertPlayerButton = new Button("Insert Player");
         TextField insertId = new TextField();
         insertId.setPromptText("Player Id");
@@ -146,17 +147,18 @@ public class Assignment2 extends Application {
                 }
         );
 
+        ////Insert Button and Parameters
         Button insertMatchButton = new Button("Insert Match");
         TextField insertId1 = new TextField();
-        insertId1.setPromptText("Player1 Id");
+        insertId1.setPromptText("Player 1 Id");
         TextField insertId2 = new TextField();
         insertId2.setPromptText("Player 2 Id");
         TextField insertYear = new TextField();
-        insertYear.setPromptText("Year");
+        insertYear.setPromptText("Year <YYYY>");
         TextField insertMonth = new TextField();
-        insertMonth.setPromptText("Month");
+        insertMonth.setPromptText("Month <MM>");
         TextField insertDay = new TextField();
-        insertDay.setPromptText("Day");
+        insertDay.setPromptText("Day <DD>");
         TextField insertTournament = new TextField();
         insertTournament.setPromptText("Tournament");
         TextField insertScore = new TextField();
@@ -168,6 +170,7 @@ public class Assignment2 extends Application {
                                 Integer.valueOf(insertYear.getText()),Integer.valueOf(insertMonth.getText()),
                                 Integer.valueOf(insertDay.getText()), insertTournament.getText(), insertScore.getText() );
                         playerTableView.setItems(this.getPlayers());
+                        playerTableView.refresh();
                         matchTableView.setItems(this.getMatches());
                     } catch (TennisDatabaseException e) {
                         System.out.println(e.getMessage());
@@ -177,37 +180,36 @@ public class Assignment2 extends Application {
 
 
 
-
+        //HBox with the database tables
         HBox databaseHBox = new HBox(30);
         databaseHBox.getChildren().addAll(playerTableView, matchTableView);
 
+        //VBox with the load, save, reset, and delete actions
         VBox vBox = new VBox(30);
         vBox.getChildren().addAll(databaseHBox, loadButton, loadFileName, saveButton, saveFileName, resetButton, deleteButton, deleteId);
 
-        VBox playerBox = new VBox(30);
-        playerBox.getChildren().addAll(insertPlayerButton, insertId, insertFName, insertLName, insertBirthYear,
+        //VBox set to the right side for inserting players and matches
+        VBox sideBar = new VBox(30);
+        sideBar.getChildren().addAll(insertPlayerButton, insertId, insertFName, insertLName, insertBirthYear,
                 insertCountry, insertMatchButton, insertId1, insertId2, insertYear, insertMonth, insertDay, insertTournament, insertScore);
 
         BorderPane borderPane = new BorderPane();
         borderPane.setLeft(vBox);
-        borderPane.setRight(playerBox);
+        borderPane.setRight(sideBar);
         Scene scene = new Scene(borderPane, 1500, 800);
 
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    public ObservableList getPlayers() {
-        ObservableList<TennisPlayer> players = FXCollections.observableArrayList();
-
-        try {
-            players.addAll(database.getAllPlayers());
-        } catch (TennisDatabaseRuntimeException e) {
-            throw e;
-        }
+    //Output: ObservableList of TennisPlayer[]
+    public ObservableList<TennisPlayer> getPlayers() {
+        TennisPlayer[] playerContainerArray = database.getAllPlayers();
+        ObservableList<TennisPlayer> players = FXCollections.observableArrayList(playerContainerArray);
         return players;
     }
 
+    //Output: ObservableList of TennisMatch[]
     public ObservableList getMatches() {
         ObservableList<TennisMatch> matches = FXCollections.observableArrayList();
 

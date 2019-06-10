@@ -28,7 +28,6 @@ class TennisMatchContainer implements TennisMatchContainerInterface
 
     // Desc.: Insert a tennis match into this container.
     // Input: A tennis match.
-    // Output: Throws a checked (critical) exception if the container is full.
     public void insertMatch( TennisMatch m ) throws TennisDatabaseException {
         // Find the point of insertion.
         int point = 0;
@@ -37,7 +36,6 @@ class TennisMatchContainer implements TennisMatchContainerInterface
             point++;
         }
         this.matchList.add( point, m );
-        //TODO: Handle exception
     }
 
     // Desc.: Returns all matches in the database arranged in the output array (sorted by date, most recent first).

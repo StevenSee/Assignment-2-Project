@@ -45,6 +45,9 @@ class TennisPlayerContainerNode implements TennisPlayerContainerNodeInterface
         this.right = n;
     }
 
+    // Desc.: Insert a TennisMatch object (reference) into this node.
+    // Input: A TennisMatch object (reference).
+    // Output: Throws a checked (critical) exception if match cannot be inserted in this player list.
     @Override
     public void insertMatch(TennisMatch m) throws TennisDatabaseException
     {
@@ -57,6 +60,8 @@ class TennisPlayerContainerNode implements TennisPlayerContainerNodeInterface
         }
     }
 
+    // Desc.: Returns all matches of this player arranged in the output array (sorted by date, most recent first).
+    // Output: Throws an unchecked (non-critical) exception if there are no matches for this player.
     @Override
     public TennisMatch[] getMatches() throws TennisDatabaseRuntimeException
     {

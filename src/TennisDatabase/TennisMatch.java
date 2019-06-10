@@ -111,6 +111,7 @@ public class TennisMatch implements TennisMatchInterface {
         }
     }
 
+    //Returns string for saving to file
     public String getExport() {
         String outYear = String.format("%04d", year);
         String outMonth = String.format("%02d", month);

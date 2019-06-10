@@ -14,7 +14,9 @@ public class TennisDatabase implements TennisDatabaseInterface {
     private TennisMatchContainer matchContainer = new TennisMatchContainer();
     private TennisPlayerContainer playerContainer = new TennisPlayerContainer();
 
-    //Scans input file and loads players and matches into respective containers
+    // Desc.: Loads data from file following the format described in the specifications.
+    // Output: Throws an unchecked (non-critical) exception if the loading is not fully successfull.
+    //         Throws a checked (critical) exception if the file (file name) does not exist.
     @Override
     public void loadFromFile(String fileName) throws TennisDatabaseException, TennisDatabaseRuntimeException {
 
@@ -59,6 +61,9 @@ public class TennisDatabase implements TennisDatabaseInterface {
 
     }
 
+
+    // Desc.: Saves data to file following the format described in the specifications.
+    // Output: Throws a checked (critical) exception if the file open for writing fails.
     @Override
     public void saveToFile(String fileName) throws TennisDatabaseException {
         PrintStream out;
@@ -83,6 +88,8 @@ public class TennisDatabase implements TennisDatabaseInterface {
 
     }
 
+    // Desc.: Resets the database, making it empty.
+    //Output: Throws non-critical exception if containers are already empty
     @Override
     public void reset() throws TennisDatabaseRuntimeException{
         if (this.playerContainer.getNumPlayers() == 0) {
@@ -95,11 +102,15 @@ public class TennisDatabase implements TennisDatabaseInterface {
         this.matchContainer = new TennisMatchContainer();
     }
 
+    // Desc.: Search for a player in the database by input id, and returns a copy of that player (if found).
+    // Output: Throws an unchecked (non-critical) exception if there is no player with that input id.
     @Override
     public TennisPlayer getPlayer(String id) throws TennisDatabaseRuntimeException {
         return playerContainer.getPlayer(id);
     }
 
+    // Desc.: Returns copies (deep copies) of all players in the database arranged in the output array (sorted by id, alphabetically).
+    // Output: Throws an unchecked (non-critical) exception if there are no players in the database.
     @Override
     public TennisPlayer[] getAllPlayers() throws TennisDatabaseRuntimeException {
         return playerContainer.getAllPlayers();
@@ -111,12 +122,16 @@ public class TennisDatabase implements TennisDatabaseInterface {
 
     }
 
+    // Desc.: Returns copies (deep copies) of all matches in the database arranged in the output array (sorted by date, most recent first).
+    // Output: Throws an unchecked (non-critical) exception if there are no matches in the database.
     @Override
     public TennisMatch[] getAllMatches() throws TennisDatabaseRuntimeException {
         return matchContainer.getAllMatches();
     }
 
-    //Adds player to playerContainer
+    // Desc.: Insert a player into the database.
+    // Input: All the data required for a player.
+    // Output: Throws a checked (critical) exception if player id is already in the database.
     @Override
     public void insertPlayer(String id, String firstName, String lastName, int year, String country) throws TennisDatabaseException {
         try {
@@ -128,6 +143,8 @@ public class TennisDatabase implements TennisDatabaseInterface {
 
     }
 
+    // Desc.: Search for a player in the database by id, and delete it with all his matches (if found).
+    // Output: Throws an unchecked (non-critical) exception if there is no player with that input id.
     @Override
     public void deletePlayer(String playerId) throws TennisDatabaseRuntimeException {
         matchContainer.deleteMatchesOfPlayer(playerId);
@@ -135,7 +152,10 @@ public class TennisDatabase implements TennisDatabaseInterface {
 
     }
 
-    //Adds match to matchContainer
+    // Desc.: Insert a match into the database.
+    // Input: All the data required for a match.
+    // Output: Throws a checked (critical) exception if a player does not exist in the database.
+    //         Throws a checked (critical) exception if the match score is not valid.
     @Override
     public void insertMatch(String idPlayer1, String idPlayer2, int year, int month, int day, String tournament, String score) throws TennisDatabaseException {
         TennisMatch m = new TennisMatch(idPlayer1, idPlayer2, year, month, day, tournament, score);
@@ -158,7 +178,7 @@ public class TennisDatabase implements TennisDatabaseInterface {
 
     }
 
-    //splits the date into a String array for use with TennisMatch constructor
+    //Splits the date into a String array for use with TennisMatch constructor
     public int[] splitDate(String date) {
         String year = date.substring(0, 4);
         String month = date.substring(4, 6);
