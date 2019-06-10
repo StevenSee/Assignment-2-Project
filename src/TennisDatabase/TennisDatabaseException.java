@@ -1,9 +1,10 @@
 
 
 
-// Giuseppe Turini
+// Steven Causley
+// Original By Giuseppe Turini
 // CS-102, Spring 2019
-// Assignment 1
+// Assignment 2
 
 package TennisDatabase;
 

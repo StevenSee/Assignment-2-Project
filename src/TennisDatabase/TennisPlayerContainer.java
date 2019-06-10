@@ -1,6 +1,6 @@
-//Steven Causley
-//CS-192, Spring 2019
-//Assignment 1
+// Steven Causley
+// CS-102, Spring 2019
+// Assignment 2
 
 package TennisDatabase;
 
@@ -82,7 +82,7 @@ class TennisPlayerContainer implements TennisPlayerContainerInterface {
             return currRoot.getRight();
         }
         //symmetric, search for inorder successor swap
-        else { //TODO: delete node for when node has children on both sides
+        else {
             //find the inorder successor, leftmost node of the right subtree, get leftmost of right child
             TennisPlayerContainerNode leftMost = findLeftMost(currRoot.getRight());
             //perform the copy of content from the successor into currRoot (set and get players and matches)

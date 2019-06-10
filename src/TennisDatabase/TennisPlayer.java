@@ -61,6 +61,7 @@ public class TennisPlayer implements TennisPlayerInterface
         return country;
     }
 
+    public String getFullName(){return firstName + " " + lastName;}
 
     @Override
     public int compareTo(TennisPlayer o)

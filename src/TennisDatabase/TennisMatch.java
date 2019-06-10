@@ -1,6 +1,6 @@
 // Steven Causley
 // CS-102, Spring 2019
-// Assignment 1
+// Assignment 2
 package TennisDatabase;
 
 public class TennisMatch implements TennisMatchInterface {
@@ -44,12 +44,12 @@ public class TennisMatch implements TennisMatchInterface {
 
     @Override
     public String getIdPlayer1() {
-        return idPlayer1;
+        return this.idPlayer1;
     }
 
     @Override
     public String getIdPlayer2() {
-        return idPlayer2;
+        return this.idPlayer2;
     }
 
     @Override
@@ -65,6 +65,11 @@ public class TennisMatch implements TennisMatchInterface {
     @Override
     public int getDateDay() {
         return day;
+    }
+
+    public String getDateString(){
+        String output = year + "/" + month + "/" + day;
+        return output;
     }
 
     @Override
@@ -107,7 +112,11 @@ public class TennisMatch implements TennisMatchInterface {
     }
 
     public String getExport() {
-        String output = "MATCH/" + idPlayer1 + "/" + idPlayer2 + "/" + year + "" + month + "" + day + "/" + tournament + "/" + score;
+        String outYear = String.format("%04d", year);
+        String outMonth = String.format("%02d", month);
+        String outDay = String.format("%02d", day);
+
+        String output = "MATCH/" + idPlayer1 + "/" + idPlayer2 + "/" + outYear + outMonth + outDay + "/" + tournament + "/" + score;
 
         return output;
     }

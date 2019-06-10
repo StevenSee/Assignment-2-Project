@@ -1,173 +1,222 @@
-//Steven Causley
-//CS 102-01
-//Assignment 2
-
-//TODO: Fix Heading Comments
+// Steven Causley
+// CS-102, Spring 2019
+// Assignment 2
 
 import TennisDatabase.TennisDatabase;
-import TennisDatabase.TennisDatabaseException;
+import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Orientation;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+import TennisDatabase.TennisDatabase;
+import TennisDatabase.TennisPlayer;
+import TennisDatabase.TennisMatch;
 import TennisDatabase.TennisDatabaseRuntimeException;
+import TennisDatabase.TennisDatabaseException;
 
-import java.util.InputMismatchException;
-import java.util.Scanner;
+public class Assignment2 extends Application {
+    static TennisDatabase database = new TennisDatabase();
 
-//main class
-public class Assignment2
-{
-    public static void main(String[] args) throws TennisDatabaseException
-    {
-        Scanner consoleIn = new Scanner(System.in); //Scanner for console input
-        int actionInput; //number entered in console
+    public static void main(String[] args) {launch(args);}
 
-        TennisDatabase database = new TennisDatabase();
+    public void start(Stage primaryStage) throws Exception {
+        primaryStage.setTitle("Tennis Database Manager");
 
-        //check to see if argument was entered
-        try
-        {
-            String fileName = args[0];
-        } catch (ArrayIndexOutOfBoundsException e)
-        {
-            System.out.println("ERROR: Please specify an input file in the command line");
-        }
+        TableView<TennisPlayer> playerTableView = new TableView<TennisPlayer>();
+        TableView<TennisMatch> matchTableView = new TableView<TennisMatch>();
 
-        //checks for exceptions during initial load
+        TableColumn<TennisPlayer, String> id = new TableColumn<TennisPlayer, String>("Id");
+        id.setCellValueFactory(new PropertyValueFactory<>("Id"));
+        TableColumn<TennisPlayer, String> name = new TableColumn<TennisPlayer, String>("Name");
+        name.setCellValueFactory(new PropertyValueFactory<>("FullName"));
+        TableColumn<TennisPlayer, String> birthYear = new TableColumn<TennisPlayer, String>("BirthYear");
+        birthYear.setCellValueFactory(new PropertyValueFactory<>("BirthYear"));
+        TableColumn<TennisPlayer, String> country = new TableColumn<TennisPlayer, String>("Country");
+        country.setCellValueFactory(new PropertyValueFactory<>("Country"));
+        TableColumn<TennisPlayer, String> wins = new TableColumn<TennisPlayer, String>("Wins");
+        wins.setCellValueFactory(new PropertyValueFactory<>("Wins"));
+        TableColumn<TennisPlayer, String> losses = new TableColumn<TennisPlayer, String>("Losses");
+        losses.setCellValueFactory(new PropertyValueFactory<>("Losses"));
 
-        try
-        {
-            database.loadFromFile(args[0]);
+        playerTableView.getColumns().addAll(id, name, birthYear, country, wins, losses);
 
-        } catch (TennisDatabaseRuntimeException e)
-        {
-            System.out.println("RUNTIME ERROR LOADING FROM FILE");
-        } catch (TennisDatabaseException e)
-        {
-            System.out.println("ERROR: Invalid Input File. Exit, fix file, and restart for proper usage.");
-        }
+        TableColumn<TennisMatch, String> id1 = new TableColumn<TennisMatch, String>("Player 1 Id");
+        id1.setCellValueFactory(new PropertyValueFactory<>("IdPlayer1"));
+        TableColumn<TennisMatch, String> id2 = new TableColumn<TennisMatch, String>("Player 2 Id");
+        id2.setCellValueFactory(new PropertyValueFactory<>("IdPlayer2"));
+        TableColumn<TennisMatch, String> date = new TableColumn<TennisMatch, String>("Date");
+        date.setCellValueFactory(new PropertyValueFactory<>("DateString"));
+        TableColumn<TennisMatch, String> tournament = new TableColumn<TennisMatch, String>("Tournament");
+        tournament.setCellValueFactory(new PropertyValueFactory<>("Tournament"));
+        TableColumn<TennisMatch, String> scores = new TableColumn<TennisMatch, String>("Scores");
+        scores.setCellValueFactory(new PropertyValueFactory<>("MatchScore"));
 
-        //User Interface. Exits upon invalid input
-        try
-        {
-            do
-            {
-                System.out.println("CS 102-01 Tennis Manager - Available Commands");
-                System.out.println("1 --> Print all tennis players");
-                System.out.println("2 --> Print all tennis matches of a player");
-                System.out.println("3 --> Print all tennis matches.");
-                System.out.println("4 --> Insert a tennis player.");
-                System.out.println("5 --> Insert a tennis match.");
-                System.out.println("9 --> Exit");
-                System.out.println("Enter your selection:");
-                actionInput = consoleIn.nextInt();
-                switch (actionInput)
-                {
-                    case 1:
-                        /*System.out.println("You selected \"Print all tennis players.\"");
-                        String[] playerOutputArray = database.getPlayerStringArray(); //array of tennis play strings
-                        for (int i = 0; i < playerOutputArray.length; i++)
-                        {
-                            System.out.println(playerOutputArray[i]);
-                        }
+        matchTableView.getColumns().addAll(id1, id2, date, tournament, scores);
 
-                        break;
-                    case 2:
-                        /*System.out.println("You selected \"Print all tennis matches of a player.\"");
-                        System.out.println("Enter player id:");
-                        String idInput = consoleIn.next();
-                        idInput = idInput.toUpperCase();
-                        try
-                        {
-                            String[] playerMatchStringArray = database.getMatchesOfPlayerString(idInput); //array of match strings
+        playerTableView.setItems(this.getPlayers());
+        matchTableView.setItems(this.getMatches());
 
-                            for (int i = 0; i < playerMatchStringArray.length; i++)
-                            {
-                                System.out.println(playerMatchStringArray[i]);
-                            }
-
-                        } catch (TennisDatabaseRuntimeException e)
-                        {
-                            System.out.println("Could not print matches for id: " + idInput);
-                        }*/
-                        break;
-                    case 3:
-                        /*System.out.println("You selected \"Print all tennis matches.\"");
-
-                        String[] matchArray = database.getAllMatchesString(); //array of match strings
-                        try
-                        {
-                            if (database.getMatchCount() == 0)
-                            {
-                                System.out.println("No Matches in System");
-                            } else
-                            {
-                                for (int i = 0; i < matchArray.length; i++)
-                                {
-                                    System.out.println(matchArray[i]);
-                                }
-                            }
-                        } catch (NullPointerException e) //do nothing with empty array spaces
-                        {
-
-                        }*/
-                        break;
-                    case 4:
-                        System.out.println("You selected \"Insert a tennis player.\"");
-                        System.out.println("Input player id:");
-                        String newId = consoleIn.next();
-                        System.out.println("Input first name:");
-                        String newFirstName = consoleIn.next();
-                        System.out.println("Input last name:");
-                        String newLastName = consoleIn.next();
-                        System.out.println("Input birth year:");
-                        int newBirthYear = consoleIn.nextInt();
-                        System.out.println("Input country:");
-                        String newCountry = consoleIn.next();
-                        System.out.println("Adding player...");
-                        database.insertPlayer(newId, newFirstName, newLastName, newBirthYear, newCountry);
-
-                        break;
-                    case 5:
-                        System.out.println("You selected \"Insert a tennis match.\"");
-                        System.out.println("Input player 1 id:");
-                        String newId1 = consoleIn.next();
-                        newId1 = newId1.toUpperCase();
-                        System.out.println("Input player 2 id:");
-                        String newId2 = consoleIn.next();
-                        newId2 = newId2.toUpperCase();
-                        System.out.println("Input year of match");
-                        int newYear = consoleIn.nextInt();
-                        System.out.println("Input month of match");
-                        int newMonth = consoleIn.nextInt();
-                        System.out.println("Input day of match");
-                        int newDay = consoleIn.nextInt();
-                        System.out.println("Input tournament name:");
-                        consoleIn.nextLine();
-                        String newName = consoleIn.nextLine();
-                        newName = newName.toUpperCase();
-                        System.out.println("Input scores, separated by commas:");
-                        String newScore = consoleIn.next();
-                        System.out.println("Adding match...");
-                        database.insertMatch(newId1, newId2, newYear, newMonth, newDay, newName, newScore);
-                        System.out.println("Match Added Successfully");
-                        break;
-                    case 6:
-                        System.out.println("Resetting Database");
-                        database.reset();
-                        break;
-                    case 9:
-                        System.out.println("Exiting...");
-                        break;
-                    default:
-                        System.out.println("Invalid input detected. Please enter a valid selection");
+        Button loadButton = new Button("Load From File");
+        TextField loadFileName = new TextField();
+        loadFileName.setPromptText("File Name");
+        loadButton.setOnAction(
+                eventLoadFromFile -> {
+                    try {
+                        String fileName = loadFileName.getText();
+                        database.loadFromFile(fileName);
+                        playerTableView.setItems(this.getPlayers());
+                        matchTableView.setItems(this.getMatches());
+                    } catch (TennisDatabaseException | TennisDatabaseRuntimeException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
-            }
-            while (actionInput != 9);
-        } catch (InputMismatchException e)
-        {
-            System.out.println("Invalid input detected. Exiting...");
-        }
+        );
+
+        Button saveButton = new Button("Save to File");
+        TextField saveFileName = new TextField();
+        saveFileName.setPromptText("File Name");
+        saveButton.setOnAction(
+                eventSaveToFile -> {
+                    try {
+                        String fileName = saveFileName.getText();
+                        database.saveToFile(fileName);
+                    } catch (TennisDatabaseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+        );
+
+        Button resetButton = new Button("Reset Database");
+        resetButton.setOnAction(
+                eventReset -> {
+                    try {
+                        database.reset();
+                        playerTableView.setItems(this.getPlayers());
+                        matchTableView.setItems(this.getMatches());
+                    } catch (TennisDatabaseRuntimeException e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+        );
+
+        Button deleteButton = new Button("Delete Player");
+        TextField deleteId = new TextField();
+        deleteId.setPromptText("Player Id");
+        deleteButton.setOnAction(
+                deleteEvent -> {
+                    try{
+                        database.deletePlayer(deleteId.getText());
+                        playerTableView.setItems(this.getPlayers());
+                        matchTableView.setItems(this.getMatches());
+                    } catch (TennisDatabaseRuntimeException e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+        );
+
+        Button insertPlayerButton = new Button("Insert Player");
+        TextField insertId = new TextField();
+        insertId.setPromptText("Player Id");
+        TextField insertFName = new TextField();
+        insertFName.setPromptText("First Name");
+        TextField insertLName = new TextField();
+        insertLName.setPromptText("Last Name");
+        TextField insertBirthYear = new TextField();
+        insertBirthYear.setPromptText("Birth Year <YYYY>");
+        TextField insertCountry = new TextField();
+        insertCountry.setPromptText("Country");
+        insertPlayerButton.setOnAction(
+                insertPlayerEvent -> {
+                    try {
+                        database.insertPlayer(insertId.getText(), insertFName.getText(), insertLName.getText(), Integer.valueOf(insertBirthYear.getText()), insertCountry.getText());
+                        playerTableView.setItems(this.getPlayers());
+                        matchTableView.setItems(this.getMatches());
+                    } catch (TennisDatabaseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+        );
+
+        Button insertMatchButton = new Button("Insert Match");
+        TextField insertId1 = new TextField();
+        insertId1.setPromptText("Player1 Id");
+        TextField insertId2 = new TextField();
+        insertId2.setPromptText("Player 2 Id");
+        TextField insertYear = new TextField();
+        insertYear.setPromptText("Year");
+        TextField insertMonth = new TextField();
+        insertMonth.setPromptText("Month");
+        TextField insertDay = new TextField();
+        insertDay.setPromptText("Day");
+        TextField insertTournament = new TextField();
+        insertTournament.setPromptText("Tournament");
+        TextField insertScore = new TextField();
+        insertScore.setPromptText("Score");
+        insertMatchButton.setOnAction(
+                insertMatchEvent -> {
+                    try {
+                        database.insertMatch(insertId1.getText(), insertId2.getText(),
+                                Integer.valueOf(insertYear.getText()),Integer.valueOf(insertMonth.getText()),
+                                Integer.valueOf(insertDay.getText()), insertTournament.getText(), insertScore.getText() );
+                        playerTableView.setItems(this.getPlayers());
+                        matchTableView.setItems(this.getMatches());
+                    } catch (TennisDatabaseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+        );
 
 
+
+
+        HBox databaseHBox = new HBox(30);
+        databaseHBox.getChildren().addAll(playerTableView, matchTableView);
+
+        VBox vBox = new VBox(30);
+        vBox.getChildren().addAll(databaseHBox, loadButton, loadFileName, saveButton, saveFileName, resetButton, deleteButton, deleteId);
+
+        VBox playerBox = new VBox(30);
+        playerBox.getChildren().addAll(insertPlayerButton, insertId, insertFName, insertLName, insertBirthYear,
+                insertCountry, insertMatchButton, insertId1, insertId2, insertYear, insertMonth, insertDay, insertTournament, insertScore);
+
+        BorderPane borderPane = new BorderPane();
+        borderPane.setLeft(vBox);
+        borderPane.setRight(playerBox);
+        Scene scene = new Scene(borderPane, 1500, 800);
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
+    public ObservableList getPlayers() {
+        ObservableList<TennisPlayer> players = FXCollections.observableArrayList();
+
+        try {
+            players.addAll(database.getAllPlayers());
+        } catch (TennisDatabaseRuntimeException e) {
+            throw e;
+        }
+        return players;
+    }
+
+    public ObservableList getMatches() {
+        ObservableList<TennisMatch> matches = FXCollections.observableArrayList();
+
+        try {
+            matches.addAll(database.getAllMatches());
+        } catch (TennisDatabaseRuntimeException e) {
+            throw e;
+        }
+        return matches;
+    }
 
 }

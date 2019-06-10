@@ -1,6 +1,6 @@
 // Steven Causley
 // CS-102, Spring 2019
-// Assignment 1
+// Assignment 2
 package TennisDatabase;
 
 import java.io.File;
@@ -65,7 +65,7 @@ public class TennisDatabase implements TennisDatabaseInterface {
         try {
             out = new PrintStream(fileName);
         } catch (FileNotFoundException e) {
-            throw new TennisDatabaseException("ERROR: Input file not found.");
+            throw new TennisDatabaseException("ERROR: Output file not found.");
         }
 
         //print players
@@ -84,12 +84,12 @@ public class TennisDatabase implements TennisDatabaseInterface {
     }
 
     @Override
-    public void reset() {
+    public void reset() throws TennisDatabaseRuntimeException{
         if (this.playerContainer.getNumPlayers() == 0) {
-            System.out.println("Player Container is empty. Nothing to delete");
+            throw new TennisDatabaseRuntimeException("Player Container is empty. Nothing to delete");
         }
         if (this.matchContainer.getNumMatches() == 0) {
-            System.out.println("Match Container is empty. Nothing to delete");
+            throw new TennisDatabaseRuntimeException("Match Container is empty. Nothing to delete");
         }
         this.playerContainer = new TennisPlayerContainer();
         this.matchContainer = new TennisMatchContainer();
@@ -130,7 +130,9 @@ public class TennisDatabase implements TennisDatabaseInterface {
 
     @Override
     public void deletePlayer(String playerId) throws TennisDatabaseRuntimeException {
+        matchContainer.deleteMatchesOfPlayer(playerId);
         playerContainer.deletePlayer(playerId);
+
     }
 
     //Adds match to matchContainer

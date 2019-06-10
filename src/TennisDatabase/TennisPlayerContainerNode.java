@@ -1,6 +1,6 @@
-//Steven Causley
-//CS-192, Spring 2019
-//Assignment 1
+// Steven Causley
+// CS-102, Spring 2019
+// Assignment 2
 
 package TennisDatabase;
 

@@ -1,6 +1,6 @@
 // Steven Causley
 // CS-102, Spring 2019
-// Assignment 1
+// Assignment 2
 package TennisDatabase;
 
 import java.util.Iterator;
@@ -79,11 +79,15 @@ class TennisMatchContainer implements TennisMatchContainerInterface
     // Desc.: Delete all matches of a player by id (if found).
     // Output: Throws an unchecked (non-critical) exception if there is no match with that input id.
     public void deleteMatchesOfPlayer( String playerId ) throws TennisDatabaseRuntimeException {
-        for (int i = 0; i < matchList.size(); i++) {
-            if (matchList.get(i).getIdPlayer1().equals(playerId) || matchList.get(i).getIdPlayer2().equals(playerId)){
-               matchList.remove(i);
+        int index = 0;
+        while (index < matchList.size()) {
+            if (matchList.get(index).getIdPlayer1().equals(playerId) || matchList.get(index).getIdPlayer2().equals(playerId)){
+                matchList.remove(index);
+            } else {
+                index += 1;
             }
         }
     }
+
 
 }
